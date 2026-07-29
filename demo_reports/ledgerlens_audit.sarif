@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "LedgerLens",
+          "version": "2.0.0",
+          "informationUri": "https://github.com/zoecyber001/LedgerLens",
+          "rules": [
+            {
+              "id": "FIN-DE-001",
+              "name": "Missing Debit/Credit Balance Constraint",
+              "shortDescription": {
+                "text": "Missing Debit/Credit Balance Constraint"
+              },
+              "fullDescription": {
+                "text": "Checks if a ledger/journal/transaction table lacks a CHECK constraint ensuring debits equal credits or balance invariants (amount != 0, balance >= 0, debit >= 0 AND credit >= 0)."
+              },
+              "help": {
+                "text": "Remediation: Add database CHECK constraint or trigger enforcing debit/credit non-negative and zero-sum balance invariants.\nReference: GAAP / IFRS Double-Entry Invariant Standard"
+              },
+              "properties": {
+                "tags": [
+                  "compliance",
+                  "financial-ledger",
+                  "GAAP / IFRS Double-Entry Invariant Standard"
+                ],
+                "precision": "high"
+              }
+            },
+            {
+              "id": "FIN-PII-001",
+              "name": "Plaintext BVN/NIN Column Definition",
+              "shortDescription": {
+                "text": "Plaintext BVN/NIN Column Definition"
+              },
+              "fullDescription": {
+                "text": "Checks table columns named bvn, nin, national_id, bank_verification_number defined as unencrypted VARCHAR, TEXT, CHAR, INT, BIGINT."
+              },
+              "help": {
+                "text": "Remediation: Store BVN and NIN using column-level encryption (pgcrypto/AES-256 bytea) or irreversible cryptographic hash (HMAC-SHA256).\nReference: NDPA 2023 S.29 (Database PII Encryption)"
+              },
+              "properties": {
+                "tags": [
+                  "compliance",
+                  "financial-ledger",
+                  "NDPA 2023 S.29 (Database PII Encryption)"
+                ],
+                "precision": "high"
+              }
+            },
+            {
+              "id": "FIN-PII-002",
+              "name": "Plaintext Card PAN / CVV Column Definition",
+              "shortDescription": {
+                "text": "Plaintext Card PAN / CVV Column Definition"
+              },
+              "fullDescription": {
+                "text": "Checks columns named card_number, card_pan, pan, cvv, card_cvv defined as plaintext VARCHAR/TEXT/INT."
+              },
+              "help": {
+                "text": "Remediation: Never store raw Card PAN or CVV in database tables. Use tokenization via PCI-DSS compliant payment gateway.\nReference: NDPA 2023 S.29 & PCI-DSS v4.0 Requirements"
+              },
+              "properties": {
+                "tags": [
+                  "compliance",
+                  "financial-ledger",
+                  "NDPA 2023 S.29 (Database PII Encryption)"
+                ],
+                "precision": "high"
+              }
+            },
+            {
+              "id": "FIN-IMM-001",
+              "name": "Missing Immutability Triggers / Mutable Ledger",
+              "shortDescription": {
+                "text": "Missing Immutability Triggers / Mutable Ledger"
+              },
+              "fullDescription": {
+                "text": "Checks if financial ledger tables (ledger, transaction, journal_entry, payment_log) lack triggers or policies preventing UPDATE or DELETE operations."
+              },
+              "help": {
+                "text": "Remediation: Implement BEFORE UPDATE OR DELETE triggers that raise exceptions to enforce append-only immutable ledgers.\nReference: CBN e-Payment Guidelines (PSPs/MMOs)"
+              },
+              "properties": {
+                "tags": [
+                  "compliance",
+                  "financial-ledger",
+                  "CBN e-Payment Guidelines (PSPs/MMOs)"
+                ],
+                "precision": "high"
+              }
+            },
+            {
+              "id": "FIN-IMM-002",
+              "name": "Missing Immutable Timestamps",
+              "shortDescription": {
+                "text": "Missing Immutable Timestamps"
+              },
+              "fullDescription": {
+                "text": "Checks if ledger tables lack created_at or timestamp default constraints (DEFAULT CURRENT_TIMESTAMP / DEFAULT NOW())."
+              },
+              "help": {
+                "text": "Remediation: Add created_at timestamp column with DEFAULT CURRENT_TIMESTAMP constraint.\nReference: CBN Risk-Based Cybersecurity Framework"
+              },
+              "properties": {
+                "tags": [
+                  "compliance",
+                  "financial-ledger",
+                  "CBN Risk-Based Cybersecurity Framework"
+                ],
+                "precision": "high"
+              }
+            },
+            {
+              "id": "FIN-CBN-001",
+              "name": "Missing Audit Trail Logging",
+              "shortDescription": {
+                "text": "Missing Audit Trail Logging"
+              },
+              "fullDescription": {
+                "text": "Checks for missing audit log tables or CDC (Change Data Capture) configuration in database schema."
+              },
+              "help": {
+                "text": "Remediation: Configure dedicated audit_log table with trigger-based CDC for all balance mutations per CBN guidelines.\nReference: CBN e-Payment Guidelines (PSPs/MMOs)"
+              },
+              "properties": {
+                "tags": [
+                  "compliance",
+                  "financial-ledger",
+                  "CBN e-Payment Guidelines (PSPs/MMOs)"
+                ],
+                "precision": "high"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "FIN-DE-001",
+          "level": "error",
+          "message": {
+            "text": "Checks if a ledger/journal/transaction table lacks a CHECK constraint ensuring debits equal credits or balance invariants (amount != 0, balance >= 0, debit >= 0 AND credit >= 0). (Table: wallet_ledger)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/home/zoecyber/LedgerLens/demo_db/schema.sql"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FIN-PII-001",
+          "level": "error",
+          "message": {
+            "text": "Checks table columns named bvn, nin, national_id, bank_verification_number defined as unencrypted VARCHAR, TEXT, CHAR, INT, BIGINT. (Table: customer_identities)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/home/zoecyber/LedgerLens/demo_db/schema.sql"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FIN-PII-001",
+          "level": "error",
+          "message": {
+            "text": "Checks table columns named bvn, nin, national_id, bank_verification_number defined as unencrypted VARCHAR, TEXT, CHAR, INT, BIGINT. (Table: customer_identities)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/home/zoecyber/LedgerLens/demo_db/schema.sql"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FIN-PII-002",
+          "level": "error",
+          "message": {
+            "text": "Checks columns named card_number, card_pan, pan, cvv, card_cvv defined as plaintext VARCHAR/TEXT/INT. (Table: customer_identities)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/home/zoecyber/LedgerLens/demo_db/schema.sql"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FIN-IMM-001",
+          "level": "error",
+          "message": {
+            "text": "Checks if financial ledger tables (ledger, transaction, journal_entry, payment_log) lack triggers or policies preventing UPDATE or DELETE operations. (Table: wallet_ledger)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/home/zoecyber/LedgerLens/demo_db/schema.sql"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FIN-IMM-002",
+          "level": "error",
+          "message": {
+            "text": "Checks if ledger tables lack created_at or timestamp default constraints (DEFAULT CURRENT_TIMESTAMP / DEFAULT NOW()). (Table: wallet_ledger)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/home/zoecyber/LedgerLens/demo_db/schema.sql"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "FIN-CBN-001",
+          "level": "error",
+          "message": {
+            "text": "Checks for missing audit log tables or CDC (Change Data Capture) configuration in database schema. (Table: N/A)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/home/zoecyber/LedgerLens/demo_db/schema.sql"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

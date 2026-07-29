@@ -1,0 +1,11 @@
+{
+  "zk_proof_version": "2.0.0-ZK",
+  "target_fingerprint": "304c1137e6dbc15b",
+  "timestamp": "2026-07-29T13:29:04.235570+00:00",
+  "merkle_root": "92ab547d1005eee614e611208387796503dafb24e0d114a5c425fb76a6e21fbb",
+  "compliance_score": 25.0,
+  "overall_risk_tier": "CRITICAL",
+  "total_findings_count": 7,
+  "zero_knowledge_verifier_hash": "96b9e3d1069a01d63948c629ee8cd4bf61e0e500b9ea8541e78319b397398487",
+  "proof_signature": "856405364b452a5ba8093b0f3a4d000f8a9c235bc02025f05e027f05cd15a24e"
+}

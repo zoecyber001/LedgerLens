@@ -103,9 +103,11 @@ def fix(target: str, output: str, verbose: bool) -> None:
 
     from ledgerlens.remediation.fixer import generate_remediation_sql
     fix_path = generate_remediation_sql(report, output_dir)
+    fixed_schema_path = output_dir / "schema.fixed.sql"
 
     click.echo()
-    click.secho(f"  [+] Automated remediation script generated: {fix_path}", fg="green", bold=True)
+    click.secho(f"  [+] Automated remediation script: {fix_path}", fg="green", bold=True)
+    click.secho(f"  [+] Inline patched schema file:   {fixed_schema_path}", fg="green", bold=True)
     click.echo()
 
 

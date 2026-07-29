@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ledgerlens"
+version = "1.0.0"
+description = "Automated Compliance & Secret-Scrubbing Audit Engine (NDPA 2023 + CBN Cybersecurity Guidelines)"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [
+    {name = "LedgerLens Team"},
+]
+keywords = ["compliance", "audit", "ndpa", "cbn", "cybersecurity", "fintech", "nigeria"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Topic :: Security",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "click>=8.1",
+    "reportlab>=4.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[project.scripts]
+ledgerlens = "ledgerlens.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ledgerlens*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

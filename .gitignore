@@ -14,3 +14,6 @@ htmlcov/
 audit_summary.json
 reports/
 .DS_Store
+ANNOUNCEMENT.md
+launch_announcement.md
+launch_scripts/
